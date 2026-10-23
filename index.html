@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>💝 Para ti, mi amor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            overflow: hidden;
+            background: #000;
+            touch-action: pan-y;
+        }
+
+        .stories-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .story-slide {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            pointer-events: none;
+        }
+
+        .story-slide.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        /* Reveal Animation */
+        .story-slide.active .reveal-content {
+            animation: revealIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes revealIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) rotate(-5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .story-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(15px) brightness(0.7);
+            transform: scale(1.1);
+        }
+
+        .story-content {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            z-index: 2;
+        }
+
+        /* Text Styles */
+        .love-message {
+            text-align: center;
+            color: white;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .love-message h2 {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .love-message p {
+            font-size: 1.15em;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+        .love-message .name-marina {
+            font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
+            font-size: 1.3em;
+            color: #ff6b9d;
+            text-shadow:
+                0 0 10px rgba(255, 107, 157, 0.8),
+                0 0 20px rgba(255, 107, 157, 0.6),
+                0 4px 8px rgba(0, 0, 0, 0.4);
+            font-weight: normal;
+            font-style: italic;
+            display: inline-block;
+            animation: glowName 2s ease-in-out infinite;
+        }
+
+        @keyframes glowName {
+            0%, 100% {
+                text-shadow:
+                    0 0 10px rgba(255, 107, 157, 0.8),
+                    0 0 20px rgba(255, 107, 157, 0.6),
+                    0 4px 8px rgba(0, 0, 0, 0.4);
+            }
+            50% {
+                text-shadow:
+                    0 0 20px rgba(255, 107, 157, 1),
+                    0 0 30px rgba(255, 107, 157, 0.8),
+                    0 4px 12px rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        .love-message.large {
+            font-size: 1.2em;
+        }
+
+        /* Image Container */
+        .photo-reveal {
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+            aspect-ratio: 1;
+            margin: 20px 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .photo-reveal img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Floating Hearts */
+        .hearts-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0;
+            animation: floatHeart 4s ease-in-out infinite;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            display: flex;
+            gap: 4px;
+            padding: 0 12px;
+            z-index: 100;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            width: 0%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .progress-bar.viewed .progress-fill {
+            width: 100%;
+        }
+
+        .progress-bar.active .progress-fill {
+            animation: progressAnimation 6s linear forwards;
+        }
+
+        @keyframes progressAnimation {
+            to { width: 100%; }
+        }
+
+        /* Navigation Areas */
+        .nav-area {
+            position: absolute;
+            width: 40%;
+            height: 100vh;
+            top: 0;
+            z-index: 50;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .nav-area.left {
+            left: 0;
+        }
+
+        .nav-area.right {
+            right: 0;
+        }
+
+        /* Tap Indicator */
+        .tap-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+            animation: pulse 2s ease infinite;
+            z-index: 100;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+        }
+
+        /* Intro Slide */
+        .intro-slide {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06c84 50%, #6c5b7b 100%);
+        }
+
+        .intro-content {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .lock-emoji {
+            font-size: 6em;
+            margin-bottom: 30px;
+            animation: lockShake 2s ease infinite;
+        }
+
+        @keyframes lockShake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        .intro-title {
+            color: white;
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .intro-subtitle {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.3em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .intro-date {
+            color: white;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 30px 0;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Countdown Slide */
+        .countdown-slide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .countdown-number {
+            font-size: 8em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            margin: 30px 0;
+            animation: countPulse 1s ease infinite;
+        }
+
+        @keyframes countPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Final Slide */
+        .final-slide {
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+        }
+
+        .final-content {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .final-emoji {
+            font-size: 6em;
+            margin-bottom: 30px;
+            animation: heartBeat 1.5s ease infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+        }
+
+        .final-message {
+            color: white;
+            font-size: 1.4em;
+            line-height: 1.7;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+        }
+
+        .replay-button {
+            padding: 18px 45px;
+            background: white;
+            color: #ff758c;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .replay-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .replay-button:active {
+            transform: scale(0.98);
+        }
+
+        /* Music Slide */
+        .music-slide {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06c84 50%, #6c5b7b 100%);
+        }
+
+        .music-content {
+            text-align: center;
+            padding: 40px 20px;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Gift Box Animation */
+        .gift-box {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            animation: giftShake 2s ease infinite;
+        }
+
+        @keyframes giftShake {
+            0%, 100% { transform: rotate(0deg); }
+            10% { transform: rotate(-5deg); }
+            20% { transform: rotate(5deg); }
+            30% { transform: rotate(-5deg); }
+            40% { transform: rotate(5deg); }
+            50% { transform: rotate(0deg); }
+        }
+
+        .gift-box-base {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #ff6b9d, #ff4081);
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: giftPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes giftPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .gift-ribbon-vertical {
+            position: absolute;
+            width: 30px;
+            height: 100%;
+            background: linear-gradient(to right, #ffd700, #ffed4e, #ffd700);
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .gift-ribbon-horizontal {
+            position: absolute;
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to bottom, #ffd700, #ffed4e, #ffd700);
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .gift-bow {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 4em;
+            filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.6));
+            animation: bowFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes bowFloat {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .gift-sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .sparkle {
+            position: absolute;
+            font-size: 1.5em;
+            animation: sparkleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes sparkleFloat {
+            0%, 100% {
+                opacity: 0;
+                transform: translateY(0) scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(-30px) scale(1);
+            }
+        }
+
+        .sparkle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 30%; right: 10%; animation-delay: 0.5s; }
+        .sparkle:nth-child(3) { bottom: 20%; left: 15%; animation-delay: 1s; }
+        .sparkle:nth-child(4) { bottom: 30%; right: 15%; animation-delay: 1.5s; }
+        .sparkle:nth-child(5) { top: 50%; left: 5%; animation-delay: 2s; }
+        .sparkle:nth-child(6) { top: 50%; right: 5%; animation-delay: 2.5s; }
+
+        .music-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: musicNote 1.5s ease infinite;
+        }
+
+        @keyframes musicNote {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-10deg); }
+            75% { transform: scale(1.1) rotate(10deg); }
+        }
+
+        .music-player {
+            width: 90%;
+            max-width: 400px;
+            margin: 30px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 3px solid #ffd700;
+            animation: playerReveal 1s ease forwards;
+        }
+
+        @keyframes playerReveal {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .music-player iframe {
+            width: 100%;
+            height: 152px;
+            border: none;
+        }
+
+        .music-message {
+            color: white;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .music-message h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .music-message p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        .gift-tag {
+            background: white;
+            color: #ff6b9d;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            animation: tagSwing 2s ease-in-out infinite;
+        }
+
+        @keyframes tagSwing {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        /* Romantic Gradients */
+        .gradient-1 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .gradient-2 { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+        .gradient-3 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .gradient-4 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+        .gradient-5 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+
+        @media (max-width: 768px) {
+            .love-message h2 {
+                font-size: 1.6em;
+            }
+
+            .love-message p {
+                font-size: 1em;
+            }
+
+            .intro-title {
+                font-size: 2em;
+            }
+
+            .intro-subtitle {
+                font-size: 1.1em;
+            }
+
+            .countdown-number {
+                font-size: 6em;
+            }
+
+            .photo-reveal {
+                width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stories-container" id="storiesContainer">
+        <div class="progress-container" id="progressContainer"></div>
+        <div class="nav-area left" onclick="prevStory()"></div>
+        <div class="nav-area right" onclick="nextStory()"></div>
+        <div class="tap-indicator">👆 Toca para continuar</div>
+    </div>
+
+    <script>
+        // 🎁 PERSONALIZA TUS MENSAJES Y FOTOS AQUÍ
+        const stories = [
+            // Slide 1: Intro
+            {
+                type: 'intro',
+                title: 'Para ti, mi amor 💝',
+                subtitle: 'Tengo algo muy especial preparado para ti...',
+                date: '24 de Octubre'
+            },
+
+            // Slide 2: Countdown
+            {
+                type: 'countdown',
+                message: 'Hoy es un día muy especial...',
+                count: '24'
+            },
+
+            // Slide 3: Primer mensaje
+            {
+                type: 'text',
+                gradient: 'gradient-1',
+                message: 'Feliz cumpleaños, <span class="name-marina">Marina</span> ❤️',
+                submessage: 'Hoy celebro la vida de la persona que más amo en este mundo'
+            },
+
+            // Slides 4-23: 20 Fotos con mensajes personalizados
+            {
+                image: 'https://lh3.googleusercontent.com/d/1ZsSCpYzI2YgEO_snsoNkSY1Mnk6lXEZu',
+                title: 'Nuestro comienzo 💕',
+                message: 'Cada aventura es un paso nuevo donde aprendemos de cada uno, <span class="name-marina">Marina</span>'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1T7crvyapnnTfsrBzt8FKxE6gNVCAlI2V',
+                title: 'Juntos crecemos 🌟',
+                message: 'Contigo cada día descubro algo nuevo de nosotros'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1a40XfltqNYKRj054OF8JUBs79YhyG0y5',
+                title: 'Tu esencia 😊',
+                message: 'En cada momento aprendo a amarte más'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1l50RUJltpc9mJyFudML3gD6rehUN0mLu',
+                title: 'Nuestro camino 💑',
+                message: 'Cada paso que damos juntos, <span class="name-marina">Marina</span>, nos hace más fuertes'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1CZxugHCPbXVL25zUI7pGNIQXysaFkzwn',
+                title: 'Tu mirada ✨',
+                message: 'En tus ojos aprendo el significado del amor verdadero'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1NFADluUy-BAOF1zDQJwRYPpIW0BFJxHR',
+                title: 'Momentos únicos 🌙',
+                message: 'Cada experiencia contigo es un aprendizaje'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1iMBk9QbVokIsqe8PZHDNw9SMnuW37XUO',
+                title: 'Nuestra aventura 🌈',
+                message: 'Juntos, <span class="name-marina">Marina</span>, descubrimos lo que significa ser uno'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1H1aJn7qMZx6hrIbuIEC72xV9QN_LFZBa',
+                title: 'Aprendiendo juntos 🌺',
+                message: 'Cada día contigo es una lección de amor'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/10D5Vcidf52eJ3_wooH6wZszV6mWE5p32',
+                title: 'Creciendo en amor 🛤️',
+                message: 'Nuestras aventuras nos enseñan a ser mejores'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1BHzLEyNUzWS0b-0tSma-xDDZIdNYODiT',
+                title: 'Sin límites 💫',
+                message: 'Contigo, <span class="name-marina">Marina</span>, aprendo que el amor no tiene fronteras'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1RhNTXVp2qvUoCPxzJBivaxrBFyRYPdBJ',
+                title: 'Cada atardecer 🌅',
+                message: 'Cada nuevo día es una aventura por descubrir'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1p2eULaCDBbicZzpNsJ4myJpXxhULuxUO',
+                title: 'Nuevos horizontes 🏔️',
+                message: 'Cada reto juntos nos hace crecer más unidos'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1MdXmIG7E2jRMeTovyif_F2pyiWus8tXk',
+                title: 'Detalles especiales 🌸',
+                message: 'En los pequeños momentos aprendo tu grandeza, <span class="name-marina">Marina</span>'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1cS_r8Jcir7IMPy_V0-1m1a8mbgfzdg-A',
+                title: 'Vida en colores 🎨',
+                message: 'Contigo cada experiencia es más brillante'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1h5Jf-qUAJqAljitjTjZxYpw47YR8Zj0K',
+                title: 'Floreciendo 🌻',
+                message: 'Nuestro amor florece con cada aventura'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1tPs-eyNDkgnaI0XJ45anxYH9KvLSTXXF',
+                title: 'Amor natural 🍃',
+                message: 'Cada paso contigo es puro y verdadero'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/19eVkYFyA48E1Fxb23xuOk51IsYNqURmN',
+                title: 'Reflejos del alma 💧',
+                message: 'En cada momento me enseñas a ser mejor, <span class="name-marina">Marina</span>'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1W44MizmgGWTU5OI_pc2gAmLX3vGeiUTp',
+                title: 'Días claros 🌤️',
+                message: 'Juntos todo es posible'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1IyIHzDszF-aePIy0e9w3yVfyHD4aBLvu',
+                title: 'Paz interior 🕊️',
+                message: 'Cada aventura contigo me da tranquilidad'
+            },
+            {
+                image: 'https://lh3.googleusercontent.com/d/1gOkj6z8wKsnTz6h5FaeuSpapgroynaRk',
+                title: 'Para siempre 💍',
+                message: 'Cada paso nuevo que damos, <span class="name-marina">Marina</span>, nos acerca a la eternidad'
+            },
+
+            // Slide 24: Mensaje especial
+            {
+                type: 'text',
+                gradient: 'gradient-4',
+                message: 'En este día tan especial...',
+                submessage: 'Quiero que sepas que eres lo mejor que me ha pasado en la vida'
+            },
+
+            // Slide 25: Canción especial
+            {
+                type: 'music',
+                title: 'Nuestra Canción 🎵',
+                message: 'Esta canción es para ti, <span class="name-marina">Marina</span>...',
+                musicUrl: 'https://youtu.be/Z81hsLIY1sQ',
+            },
+
+            // Slide 26: Final
+            {
+                type: 'final',
+                emoji: '💝',
+                message: 'Feliz cumpleaños, mi amor ❤️\n\nQue este nuevo año de vida esté lleno de alegría, salud, amor y que todos tus sueños se hagan realidad.\n\nTe amo más de lo que las palabras pueden expresar.\n\n¡Feliz 24 de Octubre! 🎉'
+            }
+        ];
+
+        let currentStory = 0;
+        let autoplayTimer = null;
+
+        function initStories() {
+            const container = document.getElementById('storiesContainer');
+            const progressContainer = document.getElementById('progressContainer');
+
+            // Create progress bars
+            stories.forEach(() => {
+                const bar = document.createElement('div');
+                bar.className = 'progress-bar';
+                bar.innerHTML = '<div class="progress-fill"></div>';
+                progressContainer.appendChild(bar);
+            });
+
+            // Create story slides
+            stories.forEach((story, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'story-slide';
+
+                if (story.type === 'intro') {
+                    slide.classList.add('intro-slide');
+                    slide.innerHTML = `
+                        <div class="intro-content reveal-content">
+                            <div class="lock-emoji">🔒</div>
+                            <h1 class="intro-title">${story.title}</h1>
+                            <p class="intro-subtitle">${story.subtitle}</p>
+                            <div class="intro-date">${story.date}</div>
+                        </div>
+                        <div class="hearts-container">
+                            ${createHearts()}
+                        </div>
+                    `;
+                } else if (story.type === 'countdown') {
+                    slide.classList.add('countdown-slide');
+                    slide.innerHTML = `
+                        <div class="story-content">
+                            <div class="reveal-content">
+                                <div class="love-message">
+                                    <h2>${story.message}</h2>
+                                </div>
+                                <div class="countdown-number">${story.count}</div>
+                                <div class="love-message">
+                                    <p>de Octubre</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (story.type === 'text') {
+                    slide.classList.add(story.gradient);
+                    slide.innerHTML = `
+                        <div class="story-content">
+                            <div class="reveal-content">
+                                <div class="love-message large">
+                                    <h2>${story.message}</h2>
+                                    <p>${story.submessage}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hearts-container">
+                            ${createHearts()}
+                        </div>
+                    `;
+                } else if (story.type === 'music') {
+                    slide.classList.add('music-slide');
+                    const videoId = extractYouTubeID(story.musicUrl);
+                    const embedUrl = videoId
+                        ? `https://www.youtube.com/embed/${videoId}?autoplay=1`
+                        : story.musicUrl;
+
+                    slide.innerHTML = `
+                        <div class="music-content reveal-content">
+                            <div class="gift-box">
+                                <div class="gift-bow">🎀</div>
+                                <div class="gift-box-base">
+                                    <div class="gift-ribbon-vertical"></div>
+                                    <div class="gift-ribbon-horizontal"></div>
+                                </div>
+                                <div class="gift-sparkles">
+                                    <div class="sparkle">✨</div>
+                                    <div class="sparkle">✨</div>
+                                    <div class="sparkle">✨</div>
+                                    <div class="sparkle">✨</div>
+                                    <div class="sparkle">✨</div>
+                                    <div class="sparkle">✨</div>
+                                </div>
+                            </div>
+                            <div class="music-icon">🎁</div>
+                            <div class="gift-tag">Para: Marina 💝</div>
+                            <div class="music-message">
+                                <h2>${story.title}</h2>
+                                <p>${story.message}</p>
+                            </div>
+                            <div class="music-player">
+                                <iframe
+                                    src="${embedUrl}"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                    `;
+                } else if (story.type === 'final') {
+                    slide.classList.add('final-slide');
+                    slide.innerHTML = `
+                        <div class="final-content reveal-content">
+                            <div class="final-emoji">${story.emoji}</div>
+                            <p class="final-message">${story.message.replace(/\n/g, '<br>')}</p>
+                            <button class="replay-button" onclick="restartStories()">Ver de nuevo 🔄</button>
+                        </div>
+                        <div class="hearts-container">
+                            ${createHearts()}
+                        </div>
+                    `;
+                } else {
+                    // Photo slide
+                    slide.innerHTML = `
+                        <div class="story-background" style="background-image: url('${story.image}')"></div>
+                        <div class="story-content">
+                            <div class="reveal-content">
+                                <div class="love-message">
+                                    <h2>${story.title}</h2>
+                                </div>
+                                <div class="photo-reveal">
+                                    <img src="${story.image}" alt="${story.title}">
+                                </div>
+                                <div class="love-message">
+                                    <p>${story.message}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                container.appendChild(slide);
+            });
+
+            showStory(0);
+        }
+
+        function createHearts() {
+            let hearts = '';
+            for (let i = 0; i < 8; i++) {
+                const left = Math.random() * 100;
+                const delay = Math.random() * 4;
+                const duration = 4 + Math.random() * 2;
+                hearts += `<div class="heart" style="left: ${left}%; animation-delay: ${delay}s; animation-duration: ${duration}s;">💕</div>`;
+            }
+            return hearts;
+        }
+
+        function extractYouTubeID(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        function showStory(index) {
+            const slides = document.querySelectorAll('.story-slide');
+            const progressBars = document.querySelectorAll('.progress-bar');
+
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+
+            progressBars.forEach((bar, i) => {
+                bar.classList.remove('active', 'viewed');
+                if (i < index) {
+                    bar.classList.add('viewed');
+                } else if (i === index) {
+                    bar.classList.add('active');
+                }
+            });
+
+            currentStory = index;
+            startAutoplay();
+        }
+
+        function nextStory() {
+            stopAutoplay();
+            if (currentStory < stories.length - 1) {
+                showStory(currentStory + 1);
+            }
+        }
+
+        function prevStory() {
+            stopAutoplay();
+            if (currentStory > 0) {
+                showStory(currentStory - 1);
+            }
+        }
+
+        function startAutoplay() {
+            stopAutoplay();
+            if (currentStory < stories.length - 1) {
+                autoplayTimer = setTimeout(nextStory, 6000);
+            }
+        }
+
+        function stopAutoplay() {
+            if (autoplayTimer) {
+                clearTimeout(autoplayTimer);
+            }
+        }
+
+        function restartStories() {
+            showStory(0);
+        }
+
+        // Touch/Swipe support
+        let touchStartY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.changedTouches[0].screenY;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            const touchEndY = e.changedTouches[0].screenY;
+            if (touchStartY - touchEndY > 60) nextStory();
+            if (touchEndY - touchStartY > 60) prevStory();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') nextStory();
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevStory();
+        });
+
+        // Initialize
+        initStories();
+    </script>
+</body>
+</html>
